@@ -24,7 +24,13 @@ typedef uint32_t bmi_component;
 
 // Packs components based on input values for RGB or grayscale
 #define BMI_RGB(r, g, b) ((bmi_component)((r) | (g) << 8 | (b) << 16))
-#define BMI_GRY(g) ((bmi_component)(g))
+#define BMI_GRY(v) ((bmi_component)(v))
+
+// Unpacks components
+#define BMI_RGB_R(c) ((bmi_component)((c) & 0xFF))
+#define BMI_RGB_G(c) ((bmi_component)((c) >> 8 & 0xFF))
+#define BMI_RGB_B(c) ((bmi_component)((c) >> 16 & 0xFF))
+#define BMI_GRY_V(c) ((bmi_component)((c) & 0xFF))
 
 // Predefined colors
 #define BMI_RGB_WHITE() BMI_RGB(255, 255, 255)

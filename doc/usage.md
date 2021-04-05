@@ -108,6 +108,36 @@ _Expands to a constructor for a `bmi_rect` structure with the given origin, widt
 **Status**: Derived  
 **Dependencies**: `bmi_rect`
 
+#### `BMI_RGB(r, g, b)`
+_Expands to an expression that computes a BMI color witht the given red, green and blue channels. Defined in `include/bmi-color.h`._  
+**Status**: Derived  
+**Dependencies**: `bmi_component`
+
+#### `BMI_GRY(v)`
+_Expands to an expression that computes a BMI color witht the given value channel. Defined in `include/bmi-color.h`._  
+**Status**: Derived  
+**Dependencies**: `bmi_component`
+
+#### `BMI_RGB_R(c)`
+_Expands to an expression that computes the red component of the BMI color. Defined in `include/bmi-color.h`._  
+**Status**: Derived  
+**Dependencies**: `bmi_channel`, `bmi_component`
+
+#### `BMI_RGB_G(c)`
+_Expands to an expression that computes the green component of the BMI color. Defined in `include/bmi-color.h`._  
+**Status**: Derived  
+**Dependencies**: `bmi_channel`, `bmi_component`
+
+#### `BMI_RGB_B(c)`
+_Expands to an expression that computes the blue component of the BMI color. Defined in `include/bmi-color.h`._  
+**Status**: Derived  
+**Dependencies**: `bmi_channel`, `bmi_component`
+
+#### `BMI_GRY_V(c)`
+_Expands to an expression that computes the gray component of the BMI color. Defined in `include/bmi-color.h`._  
+**Status**: Derived  
+**Dependencies**: `bmi_channel`, `bmi_component`
+
 ### 2. Data Types
 
 #### enum `bmi_flags`

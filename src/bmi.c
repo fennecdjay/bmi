@@ -40,11 +40,11 @@ inline size_t bmi_buffer_content_size(const bmi_buffer* buffer) {
 }
 
 #define BMI_GRAY_WRITE(buffer, i, p) \
-    (buffer)->contents[i] = (uint8_t)(p)
+    (buffer)->contents[i] = (uint8_t)BMI_GRY_V(p)
 #define BMI_RGB_WRITE(buffer, i, p) \
-    (buffer)->contents[i] = (uint8_t)(p); \
-    (buffer)->contents[(i) + 1] = (uint8_t)((p) >> 8); \
-    (buffer)->contents[(i) + 2] = (uint8_t)((p) >> 16)
+    (buffer)->contents[i] = (uint8_t)BMI_RGB_R(p); \
+    (buffer)->contents[(i) + 1] = (uint8_t)BMI_RGB_G(p); \
+    (buffer)->contents[(i) + 2] = (uint8_t)BMI_RGB_B(p)
 
 void bmi_buffer_draw_point(bmi_buffer* buffer, bmi_point p,
                            bmi_component pixel) {
