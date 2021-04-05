@@ -8,4 +8,4 @@ BMI supports both 8-bit grayscale and 24-bit RGB. The maximum dimensions of a BM
 
 The way that the pixel data is laid out is not specified at the binary level. Thus a BMI file saved on a little-endian machine cannot be accessed on a big-endian machine, and vice-versa.
 
-You can read more about usage [in the docs](usage.md) and write safe and robust code following [this guide](integrity.nd).
+You can read more about usage [in the docs](usage.md) and write safe and robust code following [this guide](integrity.md).
