@@ -30,12 +30,12 @@
 #define BMI_VERSION_0_0_0 0x00
 #define BMI_VERSION_CURRENT BMI_VERSION_0_0_0
 
-#define BMI_VERSION_PACK(maj, min, bug) \
-    ((uint8_t)((maj) << 6 | (min) << 3 | (bug)))
+#define BMI_VERSION_PACK(maj, min, pat) \
+    ((uint8_t)((maj) << 6 | (min) << 3 | (pat)))
 
-#define BMI_VERSION_IS_CURRENT(x) ((x) == BMI_VERSION_CURRENT)
-#define BMI_VERSION_IS_OUTDATED(x) ((x) < BMI_VERSION_CURRENT)
-#define BMI_VERSION_IS_LATER(x) ((x) > BMI_VERSION_CURRENT)
+#define BMI_VERSION_IS_CURRENT(ver) ((ver) == BMI_VERSION_CURRENT)
+#define BMI_VERSION_IS_OUTDATED(ver) ((ver) < BMI_VERSION_CURRENT)
+#define BMI_VERSION_IS_LATER(ver) ((ver) > BMI_VERSION_CURRENT)
 
 // Returns a read-only textual description of the packed version
 const char* bmi_version_string(const uint8_t version);

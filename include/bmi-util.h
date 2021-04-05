@@ -26,13 +26,13 @@ bmi_buffer* bmi_buffer_new(uint32_t width, uint32_t height, uint32_t flags);
 // Reads in and allocates a new BMI buffer from the given file
 bmi_buffer* bmi_buffer_from_file(FILE* source);
 
-// Saves the BMI to a file
+// Saves the BMI buffer to a file
 int bmi_buffer_to_file(FILE* dest, const bmi_buffer* buffer);
 
-// Saves the BMI to a file as PPM
+// Saves the BMI buffer to a file as a PPM
 int bmi_buffer_to_ppm(FILE* dest, const bmi_buffer* buffer);
 
-// Saves the BMI to a file as BMP
+// Saves the BMI buffer to a file as a BMP
 int bmi_buffer_to_bmp(FILE* dest, const bmi_buffer* buffer);
 
 #endif /* _BMI_INTERNAL_UTIL_H */

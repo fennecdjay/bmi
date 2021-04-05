@@ -1,0 +1,5 @@
+*.o
+.DS_Store
+doc/integrity.pdf
+doc/overview.pdf
+doc/usage.pdf
