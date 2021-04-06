@@ -56,26 +56,21 @@ void bmi_buffer_draw_point(bmi_buffer* buffer, bmi_point p,
     }
 }
 
-#define _MAX(x, y) ((x) > (y) ? (x) : (y))
-#define _MIN(x, y) ((x) < (y) ? (x) : (y))
-
-void bmi_clip_rect(bmi_rect* rect, const bmi_rect bounds) {
-    const uint32_t max_x = _MIN(rect->x + rect->w, bounds.x + bounds.w);
-    const uint32_t max_y = _MIN(rect->y + rect->h, bounds.y + bounds.h);;
-    rect->x = _MAX(rect->x, bounds.x);
-    rect->y = _MAX(rect->y, bounds.y);
-    rect->w = max_x - rect->x;
-    rect->h = max_y - rect->y;
-}
-
 void bmi_buffer_fill_rect(bmi_buffer* buffer, bmi_rect r, bmi_component pixel) {
+    // Clip the rectangle to prevent out-of-bounds drawing
     bmi_clip_rect(&r, BMI_RECT(0, 0, buffer->width, buffer->height));
+    
+    // Initialize the row to the specified pixels
     if (buffer->flags & BMI_FL_IS_GRAYSCALE) {
+        // Grayscale offers an optimized path using memset because each pixel is
+        // just one byte
         for (uint32_t i = 0; i < r.h; i++) {
             void* row = buffer->contents + BMI_GET_INDEX(buffer, r.x, r.y + i);
             memset(row, (uint8_t)pixel, r.w);
         }
     } else {
+        // RGB requires us to loop through the row, and this is probably not
+        // vectorized because writing an RGB pixel writes 24 bits
         for (uint32_t i = 0; i < r.h; i++) {
             const size_t index = BMI_GET_INDEX(buffer, r.x, r.y + i);
             for (uint32_t j = 0; j < r.w; j++) {
@@ -83,4 +78,30 @@ void bmi_buffer_fill_rect(bmi_buffer* buffer, bmi_rect r, bmi_component pixel) {
             }
         }
     }
+}
+
+void bmi_buffer_stroke_rect(bmi_buffer* buffer, bmi_rect r, uint32_t t,
+                            bmi_component pixel) {
+    // Clip the rectangle to prevent out-of-bounds drawing
+    bmi_clip_rect(&r, BMI_RECT(0, 0, buffer->width, buffer->height));
+    
+    // Initialize all te edges to the original rect
+    bmi_rect left, right, top, bottom;
+    left = right = top = bottom = r;
+    
+    bmi_inset_rect(&left, t, BMI_RECT_EDGE_TOP);
+    bmi_set_rect(&left, t, BMI_RECT_EDGE_LEFT);
+    bmi_inset_rect(&left, t, BMI_RECT_EDGE_BOTTOM);
+    
+    bmi_inset_rect(&right, t, BMI_RECT_EDGE_TOP);
+    bmi_set_rect(&right, t, BMI_RECT_EDGE_RIGHT);
+    bmi_inset_rect(&right, t, BMI_RECT_EDGE_BOTTOM);
+
+    bmi_set_rect(&top, t, BMI_RECT_EDGE_TOP);
+    bmi_set_rect(&bottom, t, BMI_RECT_EDGE_BOTTOM);
+    
+    bmi_buffer_fill_rect(buffer, left, pixel);
+    bmi_buffer_fill_rect(buffer, right, pixel);
+    bmi_buffer_fill_rect(buffer, top, pixel);
+    bmi_buffer_fill_rect(buffer, bottom, pixel);
 }

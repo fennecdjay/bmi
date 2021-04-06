@@ -32,4 +32,8 @@ void bmi_buffer_fill_rect(bmi_buffer* buffer, bmi_rect r, bmi_component pixel);
 void bmi_buffer_stroke_rect(bmi_buffer* buffer, bmi_rect r, uint32_t t,
                             bmi_component pixel);
 
+// Strokes a line between the specified points with specified thickness
+void bmi_buffer_stroke_line(bmi_buffer* buffer, bmi_point s, bmi_point e,
+                            uint32_t t, bmi_component pixel);
+
 #endif /* _BMI_INTERNAL_DRAW_H */

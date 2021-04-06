@@ -9,6 +9,5 @@
 #include "tests.h"
 
 int main(int argc, const char * argv[]) {
-    //return test_create_smile_bmi();
-    return test_read_smile_bmi();
+    return test_create_concentric_rects();
 }

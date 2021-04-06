@@ -188,6 +188,21 @@ typedef struct {
 **Status**: Static  
 **Dependencies**: None  
 
+### enum `bmi_rect_edge`
+_Defines the flags used to configure the interpretation of a BMI file. Defined in `include/bmi-geometry.h`._  
+**Status**: Static  
+**Dependencies**: None  
+
+**Values**
+1. `BMI_RECT_EDGE_LEFT`  
+    The left edge of the rectangle.
+2. `BMI_RECT_EDGE_RIGHT`  
+    The right edge of the rectangle.
+3. `BMI_RECT_EDGE_TOP`  
+    The top edge of the rectangle.
+4. `BMI_RECT_EDGE_BOTTOM`  
+    The bottom edge of the rectangle.
+
 #### typedef `bmi_channel`
 _Defines a type capable of representing a channel in a pixel component. Defined in `include/bmi-color.h`._
 ```c
@@ -265,6 +280,68 @@ Name | Description
 `rect` | A pointer to the BMI rect that should be bounded
 `bounds` | A box which should define the extent to be clipped to
 
+#### `bmi_dump_point`
+_Prints a debug description of the specified point to the given file. Defined in `include/bmi-geometry.h`._
+```c
+void bmi_dump_point(FILE* dest, const bmi_point point);
+```  
+**Status**: Derived  
+**Dependencies**: `bmi_point`
+
+**Parameters**
+
+Name | Description
+---- | -----------
+`dest` | A file pointer for output
+`point` | The point to be printed
+
+#### `bmi_dump_rect`
+_Prints a debug description of the specified rect to the given file. Defined in `include/bmi-geometry.h`._
+```c
+void bmi_dump_rect(FILE* dest, const bmi_rect rect);
+```  
+**Status**: Derived  
+**Dependencies**: `bmi_rect`
+
+**Parameters**
+
+Name | Description
+---- | -----------
+`dest` | A file pointer for output
+`rect` | The rectangle to be printed
+
+#### `bmi_inset_rect`
+_Insets the specified rectangle by the given amount from the specified edge. Defined in `include/bmi-geometry.h`._
+```c
+void bmi_inset_rect(bmi_rect* rect, uint32_t delta, bmi_rect_edge edge);
+```  
+**Status**: Derived  
+**Dependencies**: `bmi_rect`, `bmi_rect_edge`
+
+**Parameters**
+
+Name | Description
+---- | -----------
+`rect` | A pointer to the rectangle which is to be inset
+`delta` | The amount, in pixels, to inset the rectangle
+`edge` | The side to inset the rectangle on
+
+#### `bmi_set_rect`
+_Sets the specified edge of the specified rectangle to the given amount. Defined in `include/bmi-geometry.h`._
+```c
+void bmi_set_rect(bmi_rect* rect, uint32_t width, bmi_rect_edge edge);
+```  
+**Status**: Derived  
+**Dependencies**: `bmi_rect`, `bmi_rect_edge`
+
+**Parameters**
+
+Name | Description
+---- | -----------
+`rect` | A pointer to the rectangle which is to be set
+`delta` | The amount, in pixels, to set the rectangle
+`edge` | The side to set the rectangle on
+
 #### `bmi_buffer_draw_point`
 _Draws a pixel at the specified coordinates. Defined in `include/bmi-draw.h`._
 ```c
@@ -295,6 +372,23 @@ Name | Description
 ---- | -----------
 `buffer` | A pointer to the BMI buffer that is to be drawn to
 `r` | The region encompassing the pixels to be written
+`pixel` | The pixel to be written
+
+#### `bmi_buffer_stroke_rect`
+_Strokes a rectangle in the specified bounds with specified thickness. Defined in `include/bmi-draw.h`._
+```c
+void bmi_buffer_stroke_rect(bmi_buffer* buffer, bmi_rect r, uint32_t t, bmi_component pixel);
+```  
+**Status**: Derived  
+**Dependencies**: `bmi_buffer`, `bmi_rect`, `bmi_component`
+
+**Parameters**
+
+Name | Description
+---- | -----------
+`buffer` | A pointer to the BMI buffer that is to be drawn to
+`r` | The region surrounding the pixels to be written
+`t` | The width of the stroke line
 `pixel` | The pixel to be written
 
 #### `bmi_buffer_new`

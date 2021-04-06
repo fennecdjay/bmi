@@ -28,7 +28,8 @@
 #define BMI_HEADER_2 0x49
 
 #define BMI_VERSION_0_0_0 0x00
-#define BMI_VERSION_CURRENT BMI_VERSION_0_0_0
+#define BMI_VERSION_1_0_0 0x40
+#define BMI_VERSION_CURRENT BMI_VERSION_1_0_0
 
 #define BMI_VERSION_PACK(maj, min, pat) \
     ((uint8_t)((maj) << 6 | (min) << 3 | (pat)))

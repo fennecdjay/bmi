@@ -44,6 +44,8 @@ typedef uint32_t bmi_component;
 #define BMI_RGB_YELLOW() BMI_RGB(255, 255, 0)
 #define BMI_RGB_CYAN() BMI_RGB(0, 255, 255)
 
+#define BMI_RGB_ORANGE() BMI_RGB(255, 128, 0)
+
 #define BMI_GRY_WHITE() BMI_GRY(255)
 #define BMI_GRY_BLACK() BMI_GRY(0)
 
