@@ -14,6 +14,8 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with bmi. If not, see <https://www.gnu.org/licenses/>.
 
+#define _BMI_USE_INTERNAL
+
 #include "bmi-geometry.h"
 
 // fprintf
@@ -29,6 +31,13 @@ void bmi_dump_rect(FILE* dest, const bmi_rect rect) {
 
 #define _MAX(x, y) ((x) > (y) ? (x) : (y))
 #define _MIN(x, y) ((x) < (y) ? (x) : (y))
+
+void bmi_clip_point(bmi_point* point, const bmi_rect bounds) {
+    point->x = _MAX(point->x, bounds.x);
+    point->y = _MAX(point->y, bounds.y);
+    point->x = _MIN(point->x, bounds.x + bounds.w);
+    point->y = _MIN(point->y, bounds.y + bounds.h);
+}
 
 void bmi_clip_rect(bmi_rect* rect, const bmi_rect bounds) {
     const uint32_t max_x = _MIN(rect->x + rect->w, bounds.x + bounds.w);

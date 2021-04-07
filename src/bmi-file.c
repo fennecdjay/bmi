@@ -1,4 +1,4 @@
-// main.c
+// src: bmi-file.c
 // Copyright (C) 2021 Ethan Uppal
 //
 // bmi is free software: you can redistribute it and/or modify
@@ -14,8 +14,23 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with bmi. If not, see <https://www.gnu.org/licenses/>.
 
-#include "tests.h"
+#define _BMI_USE_INTERNAL
 
-int main(int argc, const char * argv[]) {
-    return test_draw_lines();
+// bmi_buffer_component_size
+#include "bmi-file.h"
+
+const char* bmi_version_string(const uint8_t version) {
+    static char result[6] = { 0, '.', 0, '.', 0, 0 };
+    result[0] = '0' + ((version >> 6) & 0x3);
+    result[2] = '0' + ((version >> 3) & 0x7);
+    result[4] = '0' + ((version >> 0) & 0x7);
+    return result;
+}
+
+#ifdef __GNUC__
+#define inline __attribute__((always_inline))
+#endif
+
+inline size_t bmi_buffer_content_size(const bmi_buffer* buffer) {
+    return buffer->width * buffer->height * bmi_buffer_component_size(buffer);
 }

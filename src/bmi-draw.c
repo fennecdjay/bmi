@@ -1,4 +1,4 @@
-// src: bmi.c
+// src: bmi-draw.c
 // Copyright (C) 2021 Ethan Uppal
 //
 // bmi is free software: you can redistribute it and/or modify
@@ -14,30 +14,19 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with bmi. If not, see <https://www.gnu.org/licenses/>.
 
-#include "bmi.h"
-#include <string.h> // memset
-#include <stdlib.h> // malloc
-#include <stdio.h> // fprintf, fwrite
-#include <errno.h> // errno, strerror
+#define _BMI_USE_INTERNAL
 
-static inline size_t bmi_buffer_component_size(const bmi_buffer* buffer) {
-    return BMI_COMPONENT_SIZE_FROM_FL(buffer->flags);
-}
+// bmi_clip_rect, bmi_inset_rect, bmi_set_rect
+#include "bmi-geometry.h"
+
+// bmi_buffer_component_size
+#include "bmi-draw.h"
+
+// memset
+#include <string.h>
 
 #define BMI_GET_INDEX(buffer, x, y) \
     (((buffer)->width * (y) + (x)) * bmi_buffer_component_size(buffer))
-
-const char* bmi_version_string(const uint8_t version) {
-    static char result[6] = { 0, '.', 0, '.', 0, 0 };
-    result[0] = '0' + ((version >> 6) & 0x3);
-    result[2] = '0' + ((version >> 3) & 0x7);
-    result[4] = '0' + ((version >> 0) & 0x7);
-    return result;
-}
-
-inline size_t bmi_buffer_content_size(const bmi_buffer* buffer) {
-    return buffer->width * buffer->height * bmi_buffer_component_size(buffer);
-}
 
 #define BMI_GRAY_WRITE(buffer, i, p) \
     (buffer)->contents[i] = (uint8_t)BMI_GRY_V(p)
@@ -104,4 +93,57 @@ void bmi_buffer_stroke_rect(bmi_buffer* buffer, bmi_rect r, uint32_t t,
     bmi_buffer_fill_rect(buffer, right, pixel);
     bmi_buffer_fill_rect(buffer, top, pixel);
     bmi_buffer_fill_rect(buffer, bottom, pixel);
+}
+
+#define _SWAP(x, y, T) do { \
+    const T temp = *(x); \
+    *(x) = *(y); \
+    *(y) = temp; \
+} while (0)
+
+// Modified from: https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
+void bmi_buffer_stroke_line(bmi_buffer* buffer, bmi_point s, bmi_point e,
+                            uint32_t t, bmi_component pixel) {
+    // Clip the points to prevent out-of-bounds drawing
+    bmi_clip_point(&s, BMI_RECT(0, 0, buffer->width, buffer->height));
+    bmi_clip_point(&e, BMI_RECT(0, 0, buffer->width, buffer->height));
+    
+    // Bresenham works from lower to higher
+    if (e.x < s.x) {
+        _SWAP(&s.x, &e.x, uint32_t);
+    }
+    if (e.y < s.y) {
+        _SWAP(&s.y, &e.y, uint32_t);
+    }
+    if ((e.y - s.y) > (e.x - s.x)) {
+        // Vertical path
+        const uint32_t dx = e.x - s.x;
+        const uint32_t dy = e.y - s.y;
+        int32_t rolling_error = (int32_t)(2 * dx) - (int32_t)dy;
+        uint32_t x = s.x;
+
+        for (uint32_t y = s.y; y < e.y; y++) {
+            bmi_buffer_draw_point(buffer, BMI_POINT(x, y), pixel);
+            if (rolling_error > 0) {
+                x++;
+                rolling_error -= 2 * dy;
+            }
+            rolling_error += 2 * dx;
+        }
+    } else {
+        // Horizontal path
+        const uint32_t dx = e.x - s.x;
+        const uint32_t dy = e.y - s.y;
+        int32_t rolling_error = (int32_t)(2 * dy) - (int32_t)dx;
+        uint32_t y = s.y;
+
+        for (uint32_t x = s.x; x < e.x; x++) {
+            bmi_buffer_draw_point(buffer, BMI_POINT(x, y), pixel);
+            if (rolling_error > 0) {
+                y++;
+                rolling_error -= 2 * dx;
+            }
+            rolling_error += 2 * dy;
+        }
+    }
 }

@@ -61,6 +61,12 @@ typedef struct {
 // Returns the total size, in bytes, of the BMI's contents
 size_t bmi_buffer_content_size(const bmi_buffer* buffer);
 
+#ifdef _BMI_USE_INTERNAL
 #define BMI_COMPONENT_SIZE_FROM_FL(fl) (((fl) & BMI_FL_IS_GRAYSCALE) ? 1 : 3)
+
+static inline size_t bmi_buffer_component_size(const bmi_buffer* buffer) {
+    return BMI_COMPONENT_SIZE_FROM_FL(buffer->flags);
+}
+#endif
 
 #endif /* _BMI_INTERNAL_FILE_H */

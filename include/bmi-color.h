@@ -49,4 +49,8 @@ typedef uint32_t bmi_component;
 #define BMI_GRY_WHITE() BMI_GRY(255)
 #define BMI_GRY_BLACK() BMI_GRY(0)
 
+// Blends two RGB colors with the given intensities
+bmi_component bmi_rgb_blend(bmi_component c0, uint32_t i0, bmi_component c1,
+                            uint32_t i1);
+
 #endif /* _BMI_INTERNAL_COLOR_H */

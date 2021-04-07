@@ -265,8 +265,23 @@ const char* bmi_last_error(void);
 
 A read-only string describing the latest BMI error. This string is valid until the next error is set, so be sure to avoid performing failable functions while this string is being processed if multithreading.
 
+#### `bmi_clip_point`
+_Clips the specified point to the given bounds. Defined in `include/bmi-geometry.h`._
+```c
+void bmi_clip_point(bmi_point* point, const bmi_rect bounds);
+```  
+**Status**: Derived  
+**Dependencies**: `bmi_point`, `bmi_rect`
+
+**Parameters**
+
+Name | Description
+---- | -----------
+`point` | A pointer to the BMI point that should be bounded
+`bounds` | A box which should define the extent to be bounded to
+
 #### `bmi_clip_rect`
-_Clips the specified rectangle to the given bounds. Defined in `include/bmi-geometry.h`_
+_Clips the specified rectangle to the given bounds. Defined in `include/bmi-geometry.h`._
 ```c
 void bmi_clip_rect(bmi_rect* rect, const bmi_rect bounds);
 ```  
@@ -342,6 +357,23 @@ Name | Description
 `delta` | The amount, in pixels, to set the rectangle
 `edge` | The side to set the rectangle on
 
+#### `bmi_rgb_blend`
+_Blends two RGB colors with the given intensities. Defined in `include/bmi-color.h`._
+```c
+bmi_component bmi_rgb_blend(bmi_component c0, uint32_t i0, bmi_component c1, uint32_t i1);
+```  
+**Status**: Derived  
+**Dependencies**: `bmi_component`
+
+**Parameters**
+
+Name | Description
+---- | -----------
+`c0` | An RGB color to be blended
+`i0` | The weight of the color in the finished result, from 0 to 256 inclusively
+`c1` | The second RGB color to be blended
+`i1` | The weight of the second color in the finished result, from 0 to 256 inclusively
+
 #### `bmi_buffer_draw_point`
 _Draws a pixel at the specified coordinates. Defined in `include/bmi-draw.h`._
 ```c
@@ -388,6 +420,24 @@ Name | Description
 ---- | -----------
 `buffer` | A pointer to the BMI buffer that is to be drawn to
 `r` | The region surrounding the pixels to be written
+`t` | The width of the stroke line
+`pixel` | The pixel to be written
+
+#### `bmi_buffer_stroke_line`
+_Strokes a line between the specified points with specified thickness. Defined in `include/bmi-draw.h`._
+```c
+void bmi_buffer_stroke_line(bmi_buffer* buffer, bmi_point s, bmi_point e, uint32_t t, bmi_component pixel);
+```  
+**Status**: Derived  
+**Dependencies**: `bmi_buffer`, `bmi_point`, `bmi_component`
+
+**Parameters**
+
+Name | Description
+---- | -----------
+`buffer` | A pointer to the BMI buffer that is to be drawn to
+`s` | The start point of the line
+`e` | The end point of the line
 `t` | The width of the stroke line
 `pixel` | The pixel to be written
 

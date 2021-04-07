@@ -1,4 +1,4 @@
-// main.c
+// src: bmi-color.c
 // Copyright (C) 2021 Ethan Uppal
 //
 // bmi is free software: you can redistribute it and/or modify
@@ -14,8 +14,19 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with bmi. If not, see <https://www.gnu.org/licenses/>.
 
-#include "tests.h"
+#define _BMI_USE_INTERNAL
 
-int main(int argc, const char * argv[]) {
-    return test_draw_lines();
+#include "bmi-color.h"
+
+#define _u32(...) ((uint32_t)(__VA_ARGS__))
+
+bmi_component bmi_rgb_blend(bmi_component c0, uint32_t i0, bmi_component c1,
+                            uint32_t i1) {
+    const bmi_channel red = (_u32(BMI_RGB_R(c0)) * _u32(i0)
+                             + _u32(BMI_RGB_R(c1)) * _u32(i1)) / 256;
+    const bmi_channel green = (_u32(BMI_RGB_G(c0)) * _u32(i0)
+                               + _u32(BMI_RGB_G(c1)) * _u32(i1)) / 256;
+    const bmi_channel blue = (_u32(BMI_RGB_B(c0)) * _u32(i0)
+                              + _u32(BMI_RGB_B(c1)) * _u32(i1)) / 256;
+    return BMI_RGB(red, green, blue);
 }

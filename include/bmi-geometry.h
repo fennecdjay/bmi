@@ -39,6 +39,9 @@ typedef struct {
 #define BMI_RECT(_x, _y, _w, _h) \
     ((bmi_rect){ .x = (_x), .y = (_y), .w = (_w), .h = (_h) })
 
+// Clips the specified point to the given bounds
+void bmi_clip_point(bmi_point* point, const bmi_rect bounds);
+
 // Clips the specified rectangle to the given bounds
 void bmi_clip_rect(bmi_rect* rect, const bmi_rect bounds);
 

@@ -1,14 +1,53 @@
+// tests.h
+// Copyright (C) 2021 Ethan Uppal
 //
-//  tests.c
-//  bitmap-image
+// bmi is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
 //
-//  Created by Ethan Uppal on 4/1/21.
-//  Copyright © 2021 Ethan Uppal. All rights reserved.
+// bmi is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Lesser General Public License for more details.
 //
+// You should have received a copy of the GNU Lesser General Public License
+// along with bmi. If not, see <https://www.gnu.org/licenses/>.
+
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "include/bmi.h"
+
+int test_draw_lines() {
+    bmi_buffer* buffer = bmi_buffer_new(256, 256, 0);
+    if (buffer == NULL) {
+        fprintf(stderr, "%s\n", bmi_last_error());
+        return 1;
+    }
+    
+    // Stroke purple line
+    bmi_buffer_fill_rect(buffer, BMI_RECT(0, 0, 256, 256), BMI_RGB_BLACK());
+    bmi_buffer_stroke_line(buffer, BMI_POINT(128, 0), BMI_POINT(196, 100), 1, bmi_rgb_blend(BMI_RGB_RED(), 128, BMI_RGB_BLUE(), 128));
+
+    FILE* file = fopen("test.ppm", "w");
+    if (file == NULL) {
+        perror("fopen");
+        return 1;
+    }
+    if (bmi_buffer_to_ppm(file, buffer) != BMI_SUCCESS) {
+        fprintf(stderr, "%s\n", bmi_last_error());
+        return 1;
+    }
+    if (fclose(file) != 0) {
+        perror("fclose");
+        return 1;
+    }
+    
+    free(buffer);
+    
+    return 0;
+}
 
 int test_create_concentric_rects() {
     bmi_buffer* buffer = bmi_buffer_new(256, 256, 0);
@@ -17,6 +56,7 @@ int test_create_concentric_rects() {
         return 1;
     }
     
+    // Make "concentric rectangles"
     bmi_buffer_fill_rect(buffer, BMI_RECT(0, 0, 256, 256), BMI_RGB_BLACK());
     bmi_buffer_stroke_rect(buffer, BMI_RECT(0, 0, 256, 256), 8,  BMI_RGB_RED());
     bmi_buffer_stroke_rect(buffer, BMI_RECT(16, 16, 224, 224), 8,  BMI_RGB_ORANGE());
