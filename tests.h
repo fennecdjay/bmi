@@ -17,6 +17,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include "include/bmi.h"
 
 int test_draw_lines() {
@@ -26,9 +27,15 @@ int test_draw_lines() {
         return 1;
     }
     
-    // Stroke purple line
+    // Stroke line curcle
     bmi_buffer_fill_rect(buffer, BMI_RECT(0, 0, 256, 256), BMI_RGB_BLACK());
-    bmi_buffer_stroke_line(buffer, BMI_POINT(128, 0), BMI_POINT(196, 100), 1, bmi_rgb_blend(BMI_RGB_RED(), 128, BMI_RGB_BLUE(), 128));
+    for (int i = 0; i < 120; i++) {
+        const float radians = ((float)(i * 3) * M_PI) / 180.0f;
+        const uint32_t end_x = (uint32_t)(cosf(radians) * 64.0f + 128.0f);
+        const uint32_t end_y = (uint32_t)(sinf(radians) * 128.0f + 128.0f);
+        bmi_buffer_stroke_line(buffer, BMI_POINT(128, 128),
+                               BMI_POINT(end_x, end_y), 1, BMI_RGB_WHITE());
+    }
 
     FILE* file = fopen("test.ppm", "w");
     if (file == NULL) {

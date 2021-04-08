@@ -31,6 +31,10 @@ Error indicator: `BMI_FAILURE`
 
 The following functions are unsafe to use in a multithreaded system without special caution:
 
+### `bmi_version_string`
+
+This function returns a read-only string valid until the function is called again (potentially with different arguments) again. To use this function safely, delay calling `bmi_version_string` until you have sufficiently processed this string, either by copying or other means.
+
 ### `bmi_last_error`
 
-This function returns a read-only string valid until the BMI error indicator is set again. To use this function safely, delay calling any failable functions (listed above) until you have sufficiently processed this string, either by copying or other means. 
+This function returns a read-only string valid until the BMI error indicator is set again. To use this function safely, delay calling any failable functions (listed above) until you have sufficiently processed this string, either by copying or other means.

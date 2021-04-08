@@ -25,6 +25,9 @@
 // memset
 #include <string.h>
 
+// abs
+#include <stdlib.h>
+
 #define BMI_GET_INDEX(buffer, x, y) \
     (((buffer)->width * (y) + (x)) * bmi_buffer_component_size(buffer))
 
@@ -107,40 +110,55 @@ void bmi_buffer_stroke_line(bmi_buffer* buffer, bmi_point s, bmi_point e,
     // Clip the points to prevent out-of-bounds drawing
     bmi_clip_point(&s, BMI_RECT(0, 0, buffer->width, buffer->height));
     bmi_clip_point(&e, BMI_RECT(0, 0, buffer->width, buffer->height));
-    
-    // Bresenham works from lower to higher
-    if (e.x < s.x) {
-        _SWAP(&s.x, &e.x, uint32_t);
-    }
-    if (e.y < s.y) {
-        _SWAP(&s.y, &e.y, uint32_t);
-    }
-    if ((e.y - s.y) > (e.x - s.x)) {
+        
+    if (abs((int32_t)e.y - (int32_t)s.y) > abs((int32_t)e.x - (int32_t)s.x)) {
         // Vertical path
-        const uint32_t dx = e.x - s.x;
+        
+        if (e.y < s.y) {
+            _SWAP(&s.x, &e.x, uint32_t);
+            _SWAP(&s.y, &e.y, uint32_t);
+        }
+        
+        int32_t dx = (int32_t)e.x - (int32_t)s.x;
         const uint32_t dy = e.y - s.y;
+        int32_t xi = 1;
+        if (dx < 0) {
+            xi = -1;
+            dx = -dx;
+        }
         int32_t rolling_error = (int32_t)(2 * dx) - (int32_t)dy;
         uint32_t x = s.x;
 
         for (uint32_t y = s.y; y < e.y; y++) {
             bmi_buffer_draw_point(buffer, BMI_POINT(x, y), pixel);
             if (rolling_error > 0) {
-                x++;
+                x += xi;
                 rolling_error -= 2 * dy;
             }
             rolling_error += 2 * dx;
         }
     } else {
         // Horizontal path
+        
+        if (e.x < s.x) {
+            _SWAP(&s.x, &e.x, uint32_t);
+            _SWAP(&s.y, &e.y, uint32_t);
+        }
+        
         const uint32_t dx = e.x - s.x;
-        const uint32_t dy = e.y - s.y;
+        int32_t dy = (int32_t)e.y - (int32_t)s.y;
+        int32_t yi = 1;
+        if (dy < 0) {
+            yi = -1;
+            dy = -dy;
+        }
         int32_t rolling_error = (int32_t)(2 * dy) - (int32_t)dx;
         uint32_t y = s.y;
 
         for (uint32_t x = s.x; x < e.x; x++) {
             bmi_buffer_draw_point(buffer, BMI_POINT(x, y), pixel);
             if (rolling_error > 0) {
-                y++;
+                y += yi;
                 rolling_error -= 2 * dx;
             }
             rolling_error += 2 * dy;
