@@ -27,10 +27,6 @@ const char* bmi_version_string(const uint8_t version) {
     return result;
 }
 
-#ifdef __GNUC__
-#define inline __attribute__((always_inline))
-#endif
-
 inline size_t bmi_buffer_content_size(const bmi_buffer* buffer) {
     return buffer->width * buffer->height * bmi_buffer_component_size(buffer);
 }

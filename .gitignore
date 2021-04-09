@@ -3,3 +3,7 @@
 doc/integrity.pdf
 doc/overview.pdf
 doc/usage.pdf
+*.o
+*.so
+*.a
+test

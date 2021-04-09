@@ -44,8 +44,8 @@
     (buffer)->contents[(i) + 1] = (uint8_t)BMI_RGB_G(p); \
     (buffer)->contents[(i) + 2] = (uint8_t)BMI_RGB_B(p)
 
-INLINE void bmi_buffer_draw_point(bmi_buffer* buffer, bmi_point point,
-                           bmi_component pixel) {
+void bmi_buffer_draw_point(bmi_buffer* buffer, bmi_point point,
+                           bmi_pixel pixel) {
     const size_t index = BMI_GET_INDEX(buffer, point.x, point.y);
     if (buffer->flags & BMI_FL_IS_GRAYSCALE) {
         BMI_GRAY_WRITE(buffer, index, pixel);
@@ -55,7 +55,7 @@ INLINE void bmi_buffer_draw_point(bmi_buffer* buffer, bmi_point point,
 }
 
 void bmi_buffer_fill_rect(bmi_buffer* buffer, bmi_rect bounds,
-                          bmi_component pixel) {
+                          bmi_pixel pixel) {
     // Clip the rectangle to prevent out-of-bounds drawing
     bmi_clip_rect(&bounds, BMI_RECT(0, 0, buffer->width, buffer->height));
     
@@ -81,7 +81,7 @@ void bmi_buffer_fill_rect(bmi_buffer* buffer, bmi_rect bounds,
 }
 
 void bmi_buffer_stroke_rect(bmi_buffer* buffer, bmi_rect bounds,
-                            uint32_t thickness, bmi_component pixel) {
+                            uint32_t thickness, bmi_pixel pixel) {
     // Clip the rectangle to prevent out-of-bounds drawing
     bmi_clip_rect(&bounds, BMI_RECT(0, 0, buffer->width, buffer->height));
     
@@ -114,7 +114,7 @@ void bmi_buffer_stroke_rect(bmi_buffer* buffer, bmi_rect bounds,
 
 // Modified from: https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
 void bmi_buffer_stroke_line(bmi_buffer* buffer, bmi_point start, bmi_point end,
-                            uint32_t thickness, bmi_component pixel) {
+                            uint32_t thickness, bmi_pixel pixel) {
     // Clip the points to prevent out-of-bounds drawing
     bmi_clip_point(&start, BMI_RECT(0, 0, buffer->width, buffer->height));
     bmi_clip_point(&end, BMI_RECT(0, 0, buffer->width, buffer->height));

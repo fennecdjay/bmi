@@ -36,7 +36,7 @@
 // srrno, strerror
 #include <errno.h>
 
-INLINE bmi_pixel bmi_buffer_get_pixel(const bmi_buffer* buffer, bmi_point point) {
+bmi_pixel bmi_buffer_get_pixel(const bmi_buffer* buffer, bmi_point point) {
     if (point.x >= buffer->width && point.y >= buffer->height) {
         bmi_set_error("Attempt to access point out of buffer region");
         return BMI_PIXEL_INVALID;

@@ -20,8 +20,7 @@
 
 #define _u32(...) ((uint32_t)(__VA_ARGS__))
 
-bmi_component bmi_rgb_blend(bmi_component c0, uint32_t i0, bmi_component c1,
-                            uint32_t i1) {
+bmi_pixel bmi_rgb_blend(bmi_pixel c0, uint32_t i0, bmi_pixel c1, uint32_t i1) {
     const bmi_channel red = (_u32(BMI_RGB_R(c0)) * _u32(i0)
                              + _u32(BMI_RGB_R(c1)) * _u32(i1)) / 256;
     const bmi_channel green = (_u32(BMI_RGB_G(c0)) * _u32(i0)
