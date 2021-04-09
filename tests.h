@@ -20,6 +20,48 @@
 #include <math.h>
 #include "include/bmi.h"
 
+int test_overdraw() {
+    bmi_buffer* buffer = bmi_buffer_new(256, 256, 0);
+    if (buffer == NULL) {
+        fprintf(stderr, "%s\n", bmi_last_error());
+        return 1;
+    }
+    bmi_buffer_fill_rect(buffer, BMI_RECT(0, 0, 256, 256), BMI_RGB_BLACK());
+    
+    bmi_buffer* layer = bmi_buffer_new(32, 32, 0);
+    if (layer == NULL) {
+        fprintf(stderr, "%s\n", bmi_last_error());
+        return 1;
+    }
+    bmi_buffer_fill_rect(layer, BMI_RECT(0, 0, 32, 32), BMI_RGB_RED());
+    bmi_buffer_fill_rect(layer, BMI_RECT(8, 8, 16, 16), BMI_RGB_GREEN());
+
+    bmi_buffer_overdraw_buffer(buffer, BMI_RECT(32, 32, 32, 32), layer);
+    bmi_buffer_overdraw_buffer(buffer, BMI_RECT(196, 32, 32, 32), layer);
+    bmi_buffer_overdraw_buffer(buffer, BMI_RECT(32, 196, 32, 32), layer);
+    bmi_buffer_overdraw_buffer(buffer, BMI_RECT(196, 196, 32, 32), layer);
+    
+    
+    FILE* file = fopen("test.ppm", "w");
+    if (file == NULL) {
+        perror("fopen");
+        return 1;
+    }
+    if (bmi_buffer_to_ppm(file, buffer) != BMI_SUCCESS) {
+        fprintf(stderr, "%s\n", bmi_last_error());
+        return 1;
+    }
+    if (fclose(file) != 0) {
+        perror("fclose");
+        return 1;
+    }
+    
+    free(buffer);
+    free(layer);
+    
+    return 0;
+}
+
 int test_draw_lines() {
     bmi_buffer* buffer = bmi_buffer_new(256, 256, 0);
     if (buffer == NULL) {

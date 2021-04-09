@@ -23,6 +23,10 @@
 // bmi_set_error
 #include "bmi-error.h"
 
+#include "bmi-geometry.h"
+
+#include "bmi-color.h"
+
 // fseek, ftell, rewind, fread, fwrite, fprintf
 #include <stdio.h>
 
@@ -31,6 +35,23 @@
 
 // srrno, strerror
 #include <errno.h>
+
+INLINE bmi_pixel bmi_buffer_get_pixel(const bmi_buffer* buffer, bmi_point point) {
+    if (point.x >= buffer->width && point.y >= buffer->height) {
+        bmi_set_error("Attempt to access point out of buffer region");
+        return BMI_PIXEL_INVALID;
+    }
+    if (buffer->flags & BMI_FL_IS_GRAYSCALE) {
+        return BMI_GRY(buffer->contents[BMI_GET_INDEX(buffer, point.x,
+                                                      point.y)]);
+    } else {
+        const size_t index = BMI_GET_INDEX(buffer, point.x, point.y);
+        const bmi_pixel red = buffer->contents[index];
+        const bmi_pixel green = buffer->contents[index + 1];
+        const bmi_pixel blue = buffer->contents[index + 2];
+        return BMI_RGB(red, green, blue);
+    }
+}
 
 bmi_buffer* bmi_buffer_new(uint32_t width, uint32_t height, uint32_t flags) {
     bmi_buffer* buffer = malloc(sizeof(bmi_buffer) + 256 * 256
@@ -137,3 +158,4 @@ int bmi_buffer_to_bmp(FILE* dest, const bmi_buffer* buffer) {
     bmi_set_error("bmi_buffer_to_bmp: Function not implemented");
     return BMI_BUG;
 }
+

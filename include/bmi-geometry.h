@@ -29,15 +29,15 @@ typedef struct {
 typedef struct {
     uint32_t x;
     uint32_t y;
-    uint32_t w;
-    uint32_t h;
+    uint32_t width;
+    uint32_t height;
 } bmi_rect;
 
 // Constructors for point and rectangle structs
 #define BMI_POINT(_x, _y) \
     ((bmi_point){ .x = (_x), .y = (_y) })
 #define BMI_RECT(_x, _y, _w, _h) \
-    ((bmi_rect){ .x = (_x), .y = (_y), .w = (_w), .h = (_h) })
+    ((bmi_rect){ .x = (_x), .y = (_y), .width = (_w), .height = (_h) })
 
 // Clips the specified point to the given bounds
 void bmi_clip_point(bmi_point* point, const bmi_rect bounds);

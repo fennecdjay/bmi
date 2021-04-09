@@ -108,35 +108,40 @@ _Expands to a constructor for a `bmi_rect` structure with the given origin, widt
 **Status**: Derived  
 **Dependencies**: `bmi_rect`
 
+#### `BMI_PIXEL_INVALID`
+_Expands to an expression that computes an invalid pixel. Defined in `include/bmi-color.h`_  
+**Status**: Static  
+**Dependencies**: `bmi_pixel`
+
 #### `BMI_RGB(r, g, b)`
-_Expands to an expression that computes a BMI color witht the given red, green and blue channels. Defined in `include/bmi-color.h`._  
+_Expands to an expression that computes a BMI color with the given red, green and blue channels. Defined in `include/bmi-color.h`._  
 **Status**: Derived  
-**Dependencies**: `bmi_component`
+**Dependencies**: `bmi_pixel`
 
 #### `BMI_GRY(v)`
 _Expands to an expression that computes a BMI color witht the given value channel. Defined in `include/bmi-color.h`._  
 **Status**: Derived  
-**Dependencies**: `bmi_component`
+**Dependencies**: `bmi_pixel`
 
 #### `BMI_RGB_R(c)`
 _Expands to an expression that computes the red component of the BMI color. Defined in `include/bmi-color.h`._  
 **Status**: Derived  
-**Dependencies**: `bmi_channel`, `bmi_component`
+**Dependencies**: `bmi_channel`, `bmi_pixel`
 
 #### `BMI_RGB_G(c)`
 _Expands to an expression that computes the green component of the BMI color. Defined in `include/bmi-color.h`._  
 **Status**: Derived  
-**Dependencies**: `bmi_channel`, `bmi_component`
+**Dependencies**: `bmi_channel`, `bmi_pixel`
 
 #### `BMI_RGB_B(c)`
 _Expands to an expression that computes the blue component of the BMI color. Defined in `include/bmi-color.h`._  
 **Status**: Derived  
-**Dependencies**: `bmi_channel`, `bmi_component`
+**Dependencies**: `bmi_channel`, `bmi_pixel`
 
 #### `BMI_GRY_V(c)`
 _Expands to an expression that computes the gray component of the BMI color. Defined in `include/bmi-color.h`._  
 **Status**: Derived  
-**Dependencies**: `bmi_channel`, `bmi_component`
+**Dependencies**: `bmi_channel`, `bmi_pixel`
 
 ### 2. Data Types
 
@@ -181,8 +186,8 @@ _Defines a structure representing a region of pixels in a BMI buffer. Defined in
 typedef struct {
     uint32_t x;
     uint32_t y;
-    uint32_t w;
-    uint32_t h;
+    uint32_t width;
+    uint32_t height;
 } bmi_rect;
 ```
 **Status**: Static  
@@ -207,13 +212,25 @@ _Defines the flags used to configure the interpretation of a BMI file. Defined i
 _Defines a type capable of representing a channel in a pixel component. Defined in `include/bmi-color.h`._
 ```c
 typedef uint32_t bmi_channel;
-```
+```  
+**Status**: Static  
+**Dependencies**: None  
 
-#### typedef `bmi_component`
+#### typedef `bmi_pixel`
 _Defines a type capable of representing an entire pixel component. Defined in `include/bmi-color.h`._
 ```c
+typedef uint32_t bmi_pixel;
+```  
+**Status**: Static  
+**Dependencies**: None  
+
+#### typedef `bmi_component`
+_Defines a type capable of representing an entire pixel component. Defined in `include/bmi-color.h` when `_BMI_PIXEL_NAMED_COMPONENT` is defined._
+```c
 typedef uint32_t bmi_component;
-```
+```  
+**Status**: Volatile  
+**Dependencies**: None  
 
 ### 3. Functions
 
@@ -360,10 +377,10 @@ Name | Description
 #### `bmi_rgb_blend`
 _Blends two RGB colors with the given intensities. Defined in `include/bmi-color.h`._
 ```c
-bmi_component bmi_rgb_blend(bmi_component c0, uint32_t i0, bmi_component c1, uint32_t i1);
+bmi_pixel bmi_rgb_blend(bmi_pixel c0, uint32_t i0, bmi_pixel c1, uint32_t i1);
 ```  
 **Status**: Derived  
-**Dependencies**: `bmi_component`
+**Dependencies**: `bmi_pixel`
 
 **Parameters**
 
@@ -377,10 +394,10 @@ Name | Description
 #### `bmi_buffer_draw_point`
 _Draws a pixel at the specified coordinates. Defined in `include/bmi-draw.h`._
 ```c
-void bmi_buffer_draw_point(bmi_buffer* buffer, bmi_point p, bmi_component pixel);
+void bmi_buffer_draw_point(bmi_buffer* buffer, bmi_point p, bmi_pixel pixel);
 ```  
 **Status**: Derived  
-**Dependencies**: `bmi_buffer`, `bmi_point`, `bmi_component`
+**Dependencies**: `bmi_buffer`, `bmi_point`, `bmi_pixel`
 
 **Parameters**
 
@@ -393,10 +410,10 @@ Name | Description
 #### `bmi_buffer_fill_rect`
 _Fills a rectangle in the specified bounds. Defined in `include/bmi-draw.h`._
 ```c
-void bmi_buffer_fill_rect(bmi_buffer* buffer, bmi_rect r, bmi_component pixel);
+void bmi_buffer_fill_rect(bmi_buffer* buffer, bmi_rect r, bmi_pixel pixel);
 ```  
 **Status**: Derived  
-**Dependencies**: `bmi_buffer`, `bmi_rect`, `bmi_component`
+**Dependencies**: `bmi_buffer`, `bmi_rect`, `bmi_pixel`
 
 **Parameters**
 
@@ -409,10 +426,10 @@ Name | Description
 #### `bmi_buffer_stroke_rect`
 _Strokes a rectangle in the specified bounds with specified thickness. Defined in `include/bmi-draw.h`._
 ```c
-void bmi_buffer_stroke_rect(bmi_buffer* buffer, bmi_rect r, uint32_t t, bmi_component pixel);
+void bmi_buffer_stroke_rect(bmi_buffer* buffer, bmi_rect r, uint32_t t, bmi_pixel pixel);
 ```  
 **Status**: Derived  
-**Dependencies**: `bmi_buffer`, `bmi_rect`, `bmi_component`
+**Dependencies**: `bmi_buffer`, `bmi_rect`, `bmi_pixel`
 
 **Parameters**
 
@@ -426,10 +443,10 @@ Name | Description
 #### `bmi_buffer_stroke_line`
 _Strokes a line between the specified points with specified thickness. Defined in `include/bmi-draw.h`._
 ```c
-void bmi_buffer_stroke_line(bmi_buffer* buffer, bmi_point s, bmi_point e, uint32_t t, bmi_component pixel);
+void bmi_buffer_stroke_line(bmi_buffer* buffer, bmi_point s, bmi_point e, uint32_t t, bmi_pixel pixel);
 ```  
 **Status**: Derived  
-**Dependencies**: `bmi_buffer`, `bmi_point`, `bmi_component`
+**Dependencies**: `bmi_buffer`, `bmi_point`, `bmi_pixel`
 
 **Parameters**
 
@@ -440,6 +457,45 @@ Name | Description
 `e` | The end point of the line
 `t` | The width of the stroke line
 `pixel` | The pixel to be written
+
+#### `bmi_buffer_overdraw_buffer`
+_Draws a BMI buffer in the specified bounds of another BMI buffer. Defined in `include/bmi-draw.h`._
+```c
+int bmi_buffer_overdraw_buffer(bmi_buffer* buffer, bmi_rect region, const bmi_buffer* layer);
+```  
+**Status**: Derived  
+**Dependencies**: `bmi_buffer`, `bmi_rect`
+
+**Parameters**
+
+Name | Description
+---- | -----------
+`buffer` | A pointer to the BMI buffer that is to be drawn to
+`region` | The region of the buffer to draw to
+`layer` | The buffer to draw into the given region
+
+**Return Value**
+
+Status of function.
+
+#### `bmi_buffer_get_pixel`
+_Returns the pixel at the given point in the BMI buffer. Defined in `include/bmi-util.h`._
+```c
+bmi_pixel bmi_buffer_get_pixel(const bmi_buffer* buffer, bmi_point point);
+```  
+**Status**: Derived  
+**Dependencies**: `bmi_pixel`, `bmi_buffer`, `bmi_point`
+
+**Parameters**
+
+Name | Description
+---- | -----------
+`buffer` | The buffer to extract pixel information from
+`point` | The location of the pixel to extract 
+
+**Return Value**
+
+The pixel at the given location. If the point is invalid, `BMI_PIXEL_INVALID` is returned instead.
 
 #### `bmi_buffer_new`
 _Allocates a new BMI buffer to be freed initialized with the given attributes. Defined in `include/bmi-util.h`._

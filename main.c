@@ -17,5 +17,5 @@
 #include "tests.h"
 
 int main(int argc, const char * argv[]) {
-    return test_draw_lines();
+    return test_overdraw();
 }

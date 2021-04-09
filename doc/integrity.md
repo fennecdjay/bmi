@@ -4,6 +4,16 @@ The BMI API provides a multitude of functions. Some of these functions can reach
 
 The following functions can fail:
 
+### `bmi_buffer_overdraw_buffer`
+
+Success indicator `BMI_SUCCESS`  
+Error indicator: `BMI_FAILURE`
+
+### `bmi_buffer_get_pixel`
+
+Success indicator: Anything not `BMI_PIXEL_INVALID`
+Error indicator: `BMI_PIXEL_INVALID`
+
 ### `bmi_buffer_new`
 
 Success indicator: Non-null pointer aligned to the guarantees of `malloc`.  

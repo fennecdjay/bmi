@@ -18,7 +18,12 @@
 #define _BMI_INTERNAL_UTIL_H
 
 #include "bmi-file.h"
+#include "bmi-geometry.h"
+#include "bmi-color.h"
 #include <stdio.h>
+
+// Returns the pixel at the given point in the BMI buffer
+bmi_pixel bmi_buffer_get_pixel(const bmi_buffer* buffer, bmi_point point);
 
 // Allocates a new BMI buffer to be freed initialized with the given attributes
 bmi_buffer* bmi_buffer_new(uint32_t width, uint32_t height, uint32_t flags);

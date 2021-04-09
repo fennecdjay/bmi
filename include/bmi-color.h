@@ -20,7 +20,13 @@
 #include <stdint.h>
 
 typedef uint32_t bmi_channel;
-typedef uint32_t bmi_component;
+typedef uint32_t bmi_pixel;
+
+#ifdef _BMI_PIXEL_NAMED_COMPONENT
+#define bmi_component bmi_pixel
+#endif
+
+#define BMI_PIXEL_INVALID ((bmi_component)(-1LL))
 
 // Packs components based on input values for RGB or grayscale
 #define BMI_RGB(r, g, b) ((bmi_component)((r) | (g) << 8 | (b) << 16))

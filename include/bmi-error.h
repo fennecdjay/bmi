@@ -34,6 +34,7 @@ const char* bmi_last_error(void);
 #define _BMI_THIRD(x, y, z, ...) z
 #define _BMI_SELECT(x, y, ...) _BMI_THIRD(__VA_ARGS__, x, y, ~)
 
+#define _BMI_IS_FAILABLE_bmi_buffer_overdraw_buffer ~, ~
 #define _BMI_IS_FAILABLE_bmi_buffer_new ~, ~
 #define _BMI_IS_FAILABLE_bmi_buffer_from_file ~, ~
 #define _BMI_IS_FAILABLE_bmi_buffer_to_file ~, ~
