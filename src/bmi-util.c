@@ -54,7 +54,7 @@ bmi_pixel bmi_buffer_get_pixel(const bmi_buffer* buffer, bmi_point point) {
 }
 
 bmi_buffer* bmi_buffer_new(uint32_t width, uint32_t height, uint32_t flags) {
-    bmi_buffer* buffer = malloc(sizeof(bmi_buffer) + 256 * 256
+    bmi_buffer* buffer = malloc(sizeof(bmi_buffer) + width * height
                                 * BMI_COMPONENT_SIZE_FROM_FL(flags));
     if (buffer == NULL) {
         bmi_set_error("bmi_buffer_new: Virtual memory exhausted");
